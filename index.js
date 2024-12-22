@@ -3,8 +3,10 @@ const mongoose=require("mongoose")
 const post=require("./routes/api/posts")
 const profile=require("./routes/api/profile")
 const user=require("./routes/api/users")
-
+const bodyparser=require("body-parser")
 const app=express();
+app.use(bodyparser.urlencoded({extended:false}))
+app.use(bodyparser.json());
 //database configuration
 const database=require("./config/keys").mongoURI;
 //connect to databse
@@ -23,7 +25,7 @@ app.use("/api/users",user)
 app.use("/api/profile",profile)
 app.use("/api/post",post)
 
-app.listen(3030,()=>{
+app.listen(5000,()=>{
     console.log("running");
     
 })
