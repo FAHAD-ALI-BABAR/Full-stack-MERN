@@ -16,7 +16,7 @@ mongoose.connect(database)
     console.log("connected to database");
 })
 .catch((err)=>{
-    console.log("Not connected to database",err);
+    console.log("Not connecteddd to database",err);
 })
 app.get("/",(req,res)=>{
     res.send("hellooo!")
