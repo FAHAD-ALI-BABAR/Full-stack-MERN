@@ -64,7 +64,7 @@ router.post("/login",(req,res)=>{
             
             }
             else{
-             return res.status(404).json({password:"password doesnot match"})
+             return res.status(404).json({password:"password Doesnot match"})
             }
         })
     })
