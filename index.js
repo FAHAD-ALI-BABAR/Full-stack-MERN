@@ -18,9 +18,7 @@ mongoose.connect(database)
 .catch((err)=>{
     console.log("Not connectedddd to database",err);
 })
-app.get("/",(req,res)=>{
-    res.send("hellooo!")
-})
+
 //passport middleware
 app.use(passport.initialize());
 require("./config/passport")(passport)

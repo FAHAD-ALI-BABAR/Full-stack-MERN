@@ -4,17 +4,27 @@ const gravatar=require("gravatar")
 const bcrypt=require("bcryptjs")
 const jwt=require("jsonwebtoken");
 const keys = require("../../config/keys");
+const passport=require("passport")
 
 const router=express.Router();
 router.get("/test",(req,res)=>{
     res.json({msg:"hellow my name is fahad user"})
 })
-
+const Validateregisterdata=require("../../Validations/register")
+const ValidateLoginData=require("../../Validations/login")
 router.post("/register",(req,res)=>{
+    const {err,isvalid}=Validateregisterdata(req.body)
+    console.log(req.body);
+    
+    //check validation
+    if(!isvalid){
+        return res.status(400).json(err)
+    }
     User.findOne({email:req.body.email})
     .then(user=>{
         if(user){
-            return res.status(400).json({email:"Email already existed"})
+            err.email="Email aready exists"
+            return res.status(400).json(err)
         }
         else{
             const avatar=gravatar.url(req.body.email,{
@@ -45,10 +55,18 @@ router.post("/register",(req,res)=>{
 router.post("/login",(req,res)=>{
     const email=req.body.email;
     const password=req.body.password;
+    const {err,isvalid}=ValidateLoginData(req.body)
+    console.log(req.body);
+    
+    //check validation
+    if(!isvalid){
+        return res.status(400).json(err)
+    }
     User.findOne({email})
     .then((user)=>{
         if(!user){
-            return res.status(404).json({email:"email not found"})
+            err.email="Email doesnot found"
+            return res.status(404).json(err)
         }
         bcrypt.compare(password,user.password)
         .then((ismatched)=>{
@@ -58,15 +76,24 @@ router.post("/login",(req,res)=>{
                   jwt.sign(payload,keys.SecretKey,{expiresIn:3600},(err,token)=>{
                     res.json({
                         success:true,
-                        token:"Bearer" + token
+                        token:"Bearer " + token
                     })
                   })
             
             }
             else{
-             return res.status(404).json({password:"password Doesnot match"})
+                err.password="Password incorrect"
+             return res.status(404).json(err)
             }
         })
+    })
+})
+
+router.get("/current",passport.authenticate("jwt",{session:false}),(req,res)=>{
+    res.json({
+        id:req.user.id,
+        name:req.user.name,
+        email:req.user.email
     })
 })
 module.exports=router;
