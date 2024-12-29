@@ -16,7 +16,7 @@ mongoose.connect(database)
     console.log("connected to database");
 })
 .catch((err)=>{
-    console.log("Not connectedddd to database",err);
+    console.log("Not connecteddddd to database",err);
 })
 
 //passport middleware
