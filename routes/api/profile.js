@@ -4,6 +4,7 @@ const mongoose=require("mongoose")
 const passport=require("passport")
 const Profile=require("../../models/Profile")
 const user=require("../../models/User")
+const ValidateProfileData=require("../../Validations/profile")
 router.get("/test",(req,res)=>{
     res.json({msg:"hellow my name is fahad profile"})
 })
@@ -13,7 +14,7 @@ router.get("/",passport.authenticate("jwt",{session: false}),(req,res)=>{
     Profile.findOne({user:req.user.id})
     .then(profile=>{
         if(!profile){
-            errors.notprofile="Profile not found"
+            errors.notprofile="There is no profile for this user"
             return res.status(404).json(errors)
         }
         return res.json(profile)
@@ -24,6 +25,10 @@ router.get("/",passport.authenticate("jwt",{session: false}),(req,res)=>{
 })
 
 router.post("/",passport.authenticate("jwt",{session: false}),(req,res)=>{
+    const {err,isvalid}=ValidateProfileData(req.body)
+    if(!isvalid){
+        return res.status(400).json(err)
+    }
     const profileFields={}
     profileFields.user=req.user.id
     if(req.body.Handle){

@@ -1,6 +1,6 @@
 const mongoose=require("mongoose")
 const ProfileSchema=new mongoose.Schema({
-    user:{
+    User:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Users"
     },
@@ -11,19 +11,19 @@ const ProfileSchema=new mongoose.Schema({
     },
     Company:{
         type:String,
-        required:true
+        
     },
     Description:{
         type:String,
-        required:true
+        
     },
     Website:{
         type:String,
-        required:true
+        
     },
     Location:{
         type:String,
-        required:true
+        
     },
     Status:{
         type:String,
@@ -35,36 +35,29 @@ const ProfileSchema=new mongoose.Schema({
     },
     Bio:{
         type:String,
-        required:true
+       
     },
-    Github:{
-        type:String,
-        required:true
-    },
-    Linkedin:{
-        type:String,
-        required:true
-    },
+    
     Experience:[{
         Title:{
             type:String,
-            required:true
+            
         },
         Company:{
             type:String,
-            required:true
+           
         },
         Location:{
             type:String,
-            required:true
+           
         },
         From:{
             type:Date,
-            required:true
+           
         },
         To:{
             type:Date,
-            required:true
+            
         },
         Current:{
             type:Boolean,
@@ -72,30 +65,30 @@ const ProfileSchema=new mongoose.Schema({
         },
         Description:{
             type:String,
-            required:true,
+            
             max:800
         }}],
 
         Education:[{
             University:{
                 type:String,
-                required:true
+           
             },
             Degree:{
                 type:String,
-                required:true
+                
             },
             FieldOfStudy:{
                 type:String,
-                required:true
+                
             },
             From:{
                 type:Date,
-                required:true
+               
             },
             To:{
                 type:Date,
-                required:true
+                
             },
             Current:{
                 type:Boolean,
@@ -103,25 +96,25 @@ const ProfileSchema=new mongoose.Schema({
             },
             Description:{
                 type:String,
-                required:true,
+                
                 max:800
             }}],
             Socials:{
                 Linkedin:{
                     type:String,
-                    required:true
+                    
                 },
                 Github:{
                     type:String,
-                    required:true
+                    
                 },
                 Facebook:{
                     type:String,
-                    required:true
+                    
                 },
                 Instagram:{
                     type:String,
-                    required:true
+                   
                 },
             }
         

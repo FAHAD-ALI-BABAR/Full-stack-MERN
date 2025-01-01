@@ -14,7 +14,7 @@ const Validateregisterdata=require("../../Validations/register")
 const ValidateLoginData=require("../../Validations/login")
 router.post("/register",(req,res)=>{
     const {err,isvalid}=Validateregisterdata(req.body)
-    console.log(req.body);
+    console.log("Resigetred data:",req.body);
     
     //check validation
     if(!isvalid){
@@ -56,7 +56,7 @@ router.post("/login",(req,res)=>{
     const email=req.body.email;
     const password=req.body.password;
     const {err,isvalid}=ValidateLoginData(req.body)
-    console.log(req.body);
+    console.log("login data: ",req.body);
     
     //check validation
     if(!isvalid){
