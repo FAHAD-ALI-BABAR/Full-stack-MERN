@@ -5,8 +5,73 @@ const passport=require("passport")
 const Profile=require("../../models/Profile")
 const user=require("../../models/User")
 const ValidateProfileData=require("../../Validations/profile")
+const ValidateExperienceData=require("../../Validations/experience")
 router.get("/test",(req,res)=>{
     res.json({msg:"hellow my name is fahad profile"})
+})
+
+router.get("/Handle/:Handle",(req,res)=>{
+    const errors={};
+    Profile.findOne({Handle:req.params.Handle})
+    .populate("Users",['name','avatar'])
+    .then(profile=>{
+        if(!profile){
+            errors.noprofile="No profile found"
+            res.status(404).json(errors)
+        }
+         res.json(profile)
+    }).catch(err=> res.status(404).json({profile:"no profile for this user"}))
+})
+
+router.get("/User/:User_id",(req,res)=>{
+    const errors={};
+    Profile.findOne({User:req.params.User_id})
+    .populate("Users",['name','avatar'])
+    .then(profile=>{
+        if(!profile){
+            errors.noprofile="No profile found"
+             res.status(404).json(errors)
+        }
+         res.json(profile)
+    }).catch(err=> res.status(404).json({profile:"There is not profile for this user"}))
+})
+
+router.get("/all",(req,res)=>{
+    const errors={};
+    Profile.find()
+    .populate("Users",['name','avatar'])
+    .then(profile=>{
+        if(!profile){
+            errors.noprofile="there are no profiles"
+             res.status(404).json(errors)
+        }
+         res.json(profile)
+    }).catch(err=> res.status(404).json({profile:"There are not profile for this user"}))
+})
+
+router.post("/experience",passport.authenticate("jwt",{session:false}),(req,res)=>{
+    const {err,isvalid}=ValidateExperienceData(req.body)
+    if(!isvalid){
+        return res.status(400).json(err)
+    }
+    Profile.findOne({user:req.user.id})
+    .then(profile=>{
+        console.log("Authenticated user ID:", req.user.id);
+
+        const newexp={
+            Title:req.body.Title,
+            Company:req.body.Company,
+            Location:req.body.Location,
+            From:req.body.From,
+            To:req.body.To,
+            Current:req.body.Current,
+            Description:req.body.Description,
+        }
+        //addd to experience array
+        profile.Experience.unshift(newexp)
+        profile.save().then(profile=>res.json(profile))
+    })
+   
 })
 
 router.get("/",passport.authenticate("jwt",{session: false}),(req,res)=>{
