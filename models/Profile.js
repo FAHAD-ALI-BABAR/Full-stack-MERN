@@ -78,18 +78,22 @@ const ProfileSchema=new mongoose.Schema({
         Education:[{
             University:{
                 type:String,
+                required:true
            
             },
             Degree:{
                 type:String,
+                required:true
                 
             },
             FieldOfStudy:{
                 type:String,
+                required:true
                 
             },
             From:{
                 type:Date,
+                required:true
                
             },
             To:{

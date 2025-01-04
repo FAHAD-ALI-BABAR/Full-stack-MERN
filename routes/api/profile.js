@@ -6,6 +6,8 @@ const Profile=require("../../models/Profile")
 const user=require("../../models/User")
 const ValidateProfileData=require("../../Validations/profile")
 const ValidateExperienceData=require("../../Validations/experience")
+const ValidateEducationData=require("../../Validations/educations");
+const User = require("../../models/User");
 router.get("/test",(req,res)=>{
     res.json({msg:"hellow my name is fahad profile"})
 })
@@ -74,6 +76,32 @@ router.post("/experience",passport.authenticate("jwt",{session:false}),(req,res)
    
 })
 
+
+router.post("/education",passport.authenticate("jwt",{session:false}),(req,res)=>{
+    const {err,isvalid}=ValidateEducationData(req.body)
+    if(!isvalid){
+        return res.status(400).json(err)
+    }
+    Profile.findOne({user:req.user.id})
+    .then(profile=>{
+        console.log("Authenticated user ID:", req.user.id);
+
+        const newedu={
+            University:req.body.University,
+            Degree:req.body.Degree,
+            FieldOfStudy:req.body.FieldOfStudy,
+            From:req.body.From,
+            To:req.body.To,
+            Current:req.body.Current,
+            Description:req.body.Description,
+        }
+        //addd to experience array
+        profile.Education.unshift(newedu)
+        profile.save().then(profile=>res.json(profile))
+    })
+   
+})
+
 router.get("/",passport.authenticate("jwt",{session: false}),(req,res)=>{
     const errors={};
     Profile.findOne({user:req.user.id})
@@ -89,6 +117,42 @@ router.get("/",passport.authenticate("jwt",{session: false}),(req,res)=>{
     .catch(err=> res.json(err))
 
 })
+
+router.delete("/experience/:exp_id",passport.authenticate("jwt",{session:false}),(req,res)=>{
+   
+    Profile.findOne({user:req.user.id})
+    .then(profile=>{
+        const removeindex=profile.Experience.map(item=>item.id).indexOf(req.params.exp_id)
+        profile.Experience.splice(removeindex,1)
+        profile.save().then(profile=>res.json(profile))
+    })
+    .catch(err=>res.status(404).json(err))
+   
+})
+
+router.delete("/education/:edu_id",passport.authenticate("jwt",{session:false}),(req,res)=>{
+   
+    Profile.findOne({user:req.user.id})
+    .then(profile=>{
+        const removeindex=profile.Education.map(item=>item.id).indexOf(req.params.edu_id)
+        profile.Education.splice(removeindex,1)
+        profile.save().then(profile=>res.json(profile))
+    })
+    .catch(err=>res.status(404).json(err))
+   
+})
+
+router.delete("/",passport.authenticate("jwt",{session:false}),(req,res)=>{
+   
+    Profile.findOneAndDelete({user:req.user.id})
+    .then(()=>{
+        User.findOneAndDelete({_id:req.user.id})
+        .then(()=> res.json({success:true}))
+    })
+   
+})
+
+
 
 router.post("/",passport.authenticate("jwt",{session: false}),(req,res)=>{
     const {err,isvalid}=ValidateProfileData(req.body)
