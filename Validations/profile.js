@@ -50,6 +50,6 @@ module.exports=function ValidateProfileData(data){
    
     return {
         err,
-        isvalid:isempty(err) //it will be valid is errors are empty
+        isvalid:isempty(err) //it will be valid if errors are empty
     }
 }
