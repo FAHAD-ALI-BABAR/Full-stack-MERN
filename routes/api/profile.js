@@ -22,7 +22,7 @@ router.get("/Handle/:Handle",(req,res)=>{
             res.status(404).json(errors)
         }
          res.json(profile)
-    }).catch(err=> res.status(404).json({profile:"no profile for this user"}))
+    }).catch(err=> res.status(404).json({profile:"no profileee for this user"}))
 })
 
 router.get("/User/:User_id",(req,res)=>{
