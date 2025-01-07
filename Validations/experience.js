@@ -12,7 +12,7 @@ module.exports=function ValidateExperienceData(data){
 
    
     if(validator.isEmpty(data.Title)){
-        err.Title="Title field is required"
+        err.Title="Title fields is required"
     }
     if(validator.isEmpty(data.Company)){
         err.Company="Company field is required"
