@@ -82,7 +82,7 @@ router.post("/login",(req,res)=>{
             
             }
             else{
-                err.password="Password incorrectt"
+                err.password="Password incorrectttt"
              return res.status(404).json(err)
             }
         })
